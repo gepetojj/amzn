@@ -2,29 +2,29 @@ package application.amzn.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @NotEmpty(message = "O nome não pode ser vazio.")
+    @NotBlank(message = "O nome não pode ser vazio.")
     @Size(min = 4, max = 255, message = "O nome deve ter entre 4 e 255 caracteres.")
     String name;
 
-    @NotEmpty(message = "O email não pode ser vazio.")
+    @NotBlank(message = "O email não pode ser vazio.")
     @Email(message = "O email precisa ter um formato válido.")
     @Column(unique = true)
     String email;
 
-    @NotEmpty(message = "A senha não pode ser vazia.")
+    @NotBlank(message = "A senha não pode ser vazia.")
     String password;
 
     UserRole role;
