@@ -13,21 +13,21 @@ import java.util.Objects;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private long id;
 
     @NotBlank(message = "O nome não pode ser vazio.")
     @Size(min = 4, max = 255, message = "O nome deve ter entre 4 e 255 caracteres.")
-    String name;
+    private String name;
 
     @NotBlank(message = "O email não pode ser vazio.")
     @Email(message = "O email precisa ter um formato válido.")
     @Column(unique = true)
-    String email;
+    private String email;
 
     @NotBlank(message = "A senha não pode ser vazia.")
-    String password;
+    private String password;
 
-    UserRole role;
+    private UserRole role;
 
     public User() {
     }
@@ -39,7 +39,7 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 

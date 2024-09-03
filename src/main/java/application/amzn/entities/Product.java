@@ -13,23 +13,23 @@ import java.util.Objects;
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private long id;
 
     @NotBlank(message = "O nome não pode ser vazio.")
     @Size(min = 2, max = 255, message = "O nome deve ter entre 2 e 255 caracteres.")
-    String name;
+    private String name;
 
     @NotBlank(message = "A descrição não pode ser vazia.")
     @Size(min = 10, max = 1500, message = "A descrição deve ter entre 10 e 1500 caracteres.")
-    String description;
+    private String description;
 
     @Min(value = 0, message = "O valor não pode ser menor que zero.")
-    Double price;
+    private double price;
 
     @Min(value = 0, message = "A quantidade em estoque não pode ser menor que zero.")
-    Integer quantity;
+    private int quantity;
 
-    Boolean archived;
+    private boolean archived;
 
     public Product() {
     }
@@ -43,27 +43,27 @@ public class Product implements Serializable {
         this.archived = archived;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public @NotBlank(message = "O nome não pode ser vazio.") @Size(min = 2, max = 255, message = "O nome deve ter entre 2 e 255 caracteres.") String getName() {
+    public String getName() {
         return name;
     }
 
-    public @NotBlank(message = "A descrição não pode ser vazia.") @Size(min = 10, max = 1500, message = "A descrição deve ter entre 10 e 1500 caracteres.") String getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public @Min(value = 0, message = "O valor não pode ser menor que zero.") Double getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public @Min(value = 0, message = "A quantidade em estoque não pode ser menor que zero.") Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public Boolean getArchived() {
+    public boolean getArchived() {
         return archived;
     }
 

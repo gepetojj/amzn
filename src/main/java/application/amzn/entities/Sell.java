@@ -15,25 +15,25 @@ import java.util.Objects;
 public class Sell implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private long id;
 
     @Min(value = 0, message = "O valor não pode ser menor que zero.")
-    double total;
+    private double total;
 
     @PastOrPresent(message = "A data de venda não pode ser futura.")
-    Instant createdAt;
+    private Instant createdAt;
 
     @FutureOrPresent(message = "A data de atualização não pode ser do passado.")
-    Instant updatedAt;
+    private Instant updatedAt;
 
     @OneToMany
     @JoinColumn(name = "item_id")
-    List<Item> items;
+    private List<Item> items;
 
     public Sell() {
     }
 
-    public Sell(Long id, double total, Instant createdAt, Instant updatedAt, List<Item> items) {
+    public Sell(long id, double total, Instant createdAt, Instant updatedAt, List<Item> items) {
         this.id = id;
         this.total = total;
         this.createdAt = createdAt;
@@ -41,7 +41,7 @@ public class Sell implements Serializable {
         this.items = items;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 

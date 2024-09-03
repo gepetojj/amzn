@@ -11,21 +11,21 @@ import java.util.Objects;
 public class Item implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private long id;
 
     @Min(value = 0, message = "A quantidade não pode ser menor que zero.")
-    int quantity;
+    private int quantity;
 
     @Min(value = 0, message = "O preço não pode ser menor que zero.")
-    double price;
+    private double price;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    Product product;
+    private Product product;
 
     @ManyToOne
     @JoinColumn(name = "sell_id")
-    Sell sell;
+    private Sell sell;
 
     public Item() {
     }
