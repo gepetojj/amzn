@@ -23,6 +23,10 @@ public class Item implements Serializable {
     @JoinColumn(name = "product_id")
     Product product;
 
+    @ManyToOne
+    @JoinColumn(name = "sell_id")
+    Sell sell;
+
     public Item() {
     }
 
