@@ -27,13 +27,36 @@ public class User implements Serializable {
     @NotEmpty(message = "A senha não pode ser vazia.")
     String password;
 
+    UserRole role;
+
     public User() {
     }
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, UserRole role) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = role;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public UserRole getRole() {
+        return role;
     }
 
     @Override
