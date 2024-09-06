@@ -41,6 +41,13 @@ public class User implements Serializable, UserDetails {
 
     private UserRole role;
 
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = UserRole.SELLER;
+    }
+
     @Override
     public String toString() {
         return "User{" +
