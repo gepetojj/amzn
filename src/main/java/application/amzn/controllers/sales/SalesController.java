@@ -32,6 +32,8 @@ public class SalesController {
 
     @PostMapping
     public ResponseEntity<Sale> sell(@RequestBody @Valid PostSaleDTO dto) {
+        if (dto.items().isEmpty()) return ResponseEntity.badRequest().build();
+
         try {
             return service.sell(dto);
         } catch (RuntimeException e) {
