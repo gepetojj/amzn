@@ -5,6 +5,7 @@ import application.amzn.services.SellsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,5 +23,12 @@ public class SellsController {
     public ResponseEntity<Iterable<Sell>> getProducts() {
         var sells = service.findAll();
         return ResponseEntity.ok(sells);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Sell> getProduct(@PathVariable Long id) {
+        var sell = service.findById(id);
+        if (sell == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(sell);
     }
 }

@@ -15,4 +15,8 @@ public class SellsService {
     public Iterable<Sell> findAll() {
         return repository.findAll();
     }
+
+    public Sell findById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
 }
