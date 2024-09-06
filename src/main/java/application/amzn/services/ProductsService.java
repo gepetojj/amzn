@@ -1,6 +1,8 @@
 package application.amzn.services;
 
 import application.amzn.entities.Product;
+import application.amzn.exceptions.ProductNotFoundException;
+import application.amzn.exceptions.primitives.BadRequestException;
 import application.amzn.repositories.ProductRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -49,8 +51,8 @@ public class ProductsService {
     @CacheEvict(cacheNames = "products", key = "#id")
     public ResponseEntity<?> delete(Long id) {
         var product = findById(id);
-        if (product == null) return ResponseEntity.notFound().build();
-        if (product.isArchived()) return ResponseEntity.badRequest().build();
+        if (product == null) throw new ProductNotFoundException(id);
+        if (product.isArchived()) throw new BadRequestException("O produto já esta arquivado.");
 
         if (!product.getItems().isEmpty()) {
             product.archive();

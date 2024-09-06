@@ -1,6 +1,9 @@
 package application.amzn.controllers.sales;
 
 import application.amzn.entities.Sale;
+import application.amzn.exceptions.SaleNotFoundException;
+import application.amzn.exceptions.primitives.BadRequestException;
+import application.amzn.exceptions.primitives.InternalException;
 import application.amzn.services.SalesService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
@@ -29,25 +32,25 @@ public class SalesController {
     @GetMapping("/{id}")
     public ResponseEntity<Sale> getSale(@PathVariable Long id) {
         var sell = service.findById(id);
-        if (sell == null) return ResponseEntity.notFound().build();
+        if (sell == null) throw new SaleNotFoundException(id);
         return ResponseEntity.ok(sell);
     }
 
     @PostMapping
     public ResponseEntity<Sale> sell(@RequestBody @Valid PostSaleDTO dto) {
-        if (dto.items().isEmpty()) return ResponseEntity.badRequest().build();
+        if (dto.items().isEmpty()) throw new BadRequestException("A venda deve ter ao menos um item.");
 
         try {
             return service.sell(dto);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            throw new InternalException("Não foi possível concluir a venda.");
         }
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateSale(@PathVariable Long id, @RequestBody JsonPatch dto) throws JsonPatchException, JsonProcessingException {
         var sale = service.findById(id);
-        if (sale == null) return ResponseEntity.notFound().build();
+        if (sale == null) throw new SaleNotFoundException(id);
         service.patch(sale, dto);
         return ResponseEntity.ok().build();
     }
@@ -55,7 +58,7 @@ public class SalesController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteSale(@PathVariable Long id) {
         var sale = service.findById(id);
-        if (sale == null) return ResponseEntity.notFound().build();
+        if (sale == null) throw new SaleNotFoundException(id);
         service.delete(sale);
         return ResponseEntity.ok().build();
     }

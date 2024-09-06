@@ -1,6 +1,7 @@
 package application.amzn.controllers.products;
 
 import application.amzn.entities.Product;
+import application.amzn.exceptions.ProductNotFoundException;
 import application.amzn.services.ProductsService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
@@ -29,7 +30,7 @@ public class ProductsController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable("id") Long id) {
         var product = service.findById(id);
-        if (product == null) return ResponseEntity.notFound().build();
+        if (product == null) throw new ProductNotFoundException(id);
         return ResponseEntity.ok(product);
     }
 
@@ -43,7 +44,7 @@ public class ProductsController {
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable("id") Long id, @RequestBody JsonPatch dto) throws JsonPatchException, JsonProcessingException {
         var product = service.findById(id);
-        if (product == null) return ResponseEntity.notFound().build();
+        if (product == null) throw new ProductNotFoundException(id);
         service.patch(product, dto);
         return ResponseEntity.ok().build();
     }

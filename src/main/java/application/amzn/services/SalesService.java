@@ -4,6 +4,8 @@ import application.amzn.controllers.sales.ItemDTO;
 import application.amzn.controllers.sales.PostSaleDTO;
 import application.amzn.entities.Item;
 import application.amzn.entities.Sale;
+import application.amzn.exceptions.primitives.BadRequestException;
+import application.amzn.exceptions.primitives.InternalException;
 import application.amzn.repositories.ItemRepository;
 import application.amzn.repositories.ProductRepository;
 import application.amzn.repositories.SaleRepository;
@@ -56,10 +58,10 @@ public class SalesService {
         for (ItemDTO itemDTO : dto.items()) {
             var product = productRepository.findById(itemDTO.productId()).orElse(null);
             if (product == null) {
-                throw new RuntimeException("O produto não existe");
+                throw new BadRequestException("O produto não existe");
             }
             if (!product.isSellable(itemDTO.quantity())) {
-                throw new RuntimeException("Não é possível vender esse produto");
+                throw new InternalException("Não é possível vender esse produto");
             }
 
             var item = new Item(itemDTO.quantity(), product.getPrice(), product, sale);

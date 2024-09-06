@@ -1,6 +1,7 @@
 package application.amzn.controllers.auth;
 
 import application.amzn.entities.User;
+import application.amzn.exceptions.primitives.BadRequestException;
 import application.amzn.repositories.UserRepository;
 import application.amzn.services.TokenService;
 import jakarta.validation.Valid;
@@ -36,7 +37,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO dto) {
         if (this.userRepository.findByEmail(dto.email()) != null) {
-            return ResponseEntity.badRequest().build();
+            throw new BadRequestException("O email informado já existe.");
         }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
