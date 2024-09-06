@@ -49,7 +49,7 @@ public class TokenService {
         return Instant
                 .now()
                 .plusSeconds(60 * 60 * 24)
-                .atZone(ZoneId.of("BET"))
+                .atZone(ZoneId.of("America/Maceio"))
                 .toInstant();
     }
 }
