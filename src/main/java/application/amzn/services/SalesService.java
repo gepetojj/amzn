@@ -7,20 +7,27 @@ import application.amzn.entities.Sale;
 import application.amzn.repositories.ItemRepository;
 import application.amzn.repositories.ProductRepository;
 import application.amzn.repositories.SaleRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SaleService {
-    final SaleRepository salesRepository;
-    final ProductRepository productRepository;
-    final ItemRepository itemRepository;
+public class SalesService {
+    private final SaleRepository salesRepository;
+    private final ProductRepository productRepository;
+    private final ItemRepository itemRepository;
+    private final ObjectMapper objectMapper;
 
-    public SaleService(SaleRepository salesRepository, ProductRepository productRepository, ItemRepository itemRepository) {
+    public SalesService(SaleRepository salesRepository, ProductRepository productRepository, ItemRepository itemRepository, ObjectMapper objectMapper) {
         this.salesRepository = salesRepository;
         this.productRepository = productRepository;
         this.itemRepository = itemRepository;
+        this.objectMapper = objectMapper;
     }
 
     public Iterable<Sale> findAll() {
@@ -60,5 +67,10 @@ public class SaleService {
 
         save(sale);
         return ResponseEntity.ok(sale);
+    }
+
+    public void patch(Sale sale, JsonPatch patch) throws JsonPatchException, JsonProcessingException {
+        JsonNode patched = patch.apply(objectMapper.convertValue(sale, JsonNode.class));
+        save(objectMapper.treeToValue(patched, Sale.class));
     }
 }
