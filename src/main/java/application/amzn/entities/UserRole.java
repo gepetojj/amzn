@@ -1,22 +1,24 @@
 package application.amzn.entities;
 
+import java.util.Objects;
+
 public enum UserRole {
-    SELLER(0),
-    ADMIN(1);
+    SELLER("seller"),
+    ADMIN("admin");
 
-    private final int value;
+    private final String value;
 
-    UserRole(int value) {
+    UserRole(String value) {
         this.value = value;
     }
 
-    int getValue() {
+    String valueOf() {
         return value;
     }
 
-    static UserRole fromValue(int value) {
+    static UserRole fromValue(String value) {
         for (UserRole role : values()) {
-            if (role.value == value) {
+            if (Objects.equals(role.value, value)) {
                 return role;
             }
         }
