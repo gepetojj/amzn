@@ -1,12 +1,11 @@
 package application.amzn.controllers.products;
 
+import application.amzn.entities.Product;
 import application.amzn.repositories.ProductRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("products")
@@ -31,5 +30,12 @@ public class ProductsController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(product);
+    }
+
+    @PostMapping()
+    public ResponseEntity<?> addProduct(@RequestBody @Valid PostProductDTO dto) {
+        Product product = new Product(dto.name(), dto.description(), dto.price(), dto.quantity());
+        productRepository.save(product);
+        return ResponseEntity.ok().build();
     }
 }

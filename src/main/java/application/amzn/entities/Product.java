@@ -38,6 +38,14 @@ public class Product implements Serializable {
 
     private boolean archived;
 
+    public Product(String name, String description, double price, int quantity) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+        this.archived = false;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
