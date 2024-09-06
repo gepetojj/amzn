@@ -59,6 +59,9 @@ public class SalesService {
             sale.addItem(item);
             sale.incrementTotal(itemDTO.quantity() * product.getPrice());
             itemRepository.save(item);
+
+            product.decrementQuantity(itemDTO.quantity());
+            productRepository.save(product);
         }
 
         save(sale);
