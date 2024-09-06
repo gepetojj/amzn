@@ -4,18 +4,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.PastOrPresent;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "sells")
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Getter
@@ -24,6 +21,7 @@ public class Sell implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Setter
     @Min(value = 0, message = "O valor não pode ser menor que zero.")
     private double total;
 
@@ -35,7 +33,24 @@ public class Sell implements Serializable {
 
     @OneToMany
     @JoinColumn(name = "item_id")
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
+
+    public Sell() {
+        total = 0;
+        createdAt = Instant.now();
+    }
+
+    public void incrementTotal(double amount) {
+        total += amount;
+    }
+
+    public void addItem(Item item) {
+        items.add(item);
+    }
+
+    public void removeItem(Item item) {
+        items.remove(item);
+    }
 
     @Override
     public String toString() {

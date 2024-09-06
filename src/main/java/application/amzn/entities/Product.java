@@ -1,5 +1,6 @@
 package application.amzn.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,7 +42,8 @@ public class Product implements Serializable {
     private boolean archived;
 
     @OneToMany
-    private List<Item> items;
+    @JsonIgnore
+    private List<Item> items = new ArrayList<>();
 
     public Product(String name, String description, double price, int quantity) {
         this.name = name;
@@ -50,12 +53,29 @@ public class Product implements Serializable {
         this.archived = false;
     }
 
+    public boolean isSellable(int quantity) {
+        if (isArchived()) return false;
+        return quantity <= this.quantity;
+    }
+
+    public void decrementQuantity(int amount) {
+        this.quantity -= amount;
+    }
+
     public void archive() {
         this.archived = true;
     }
 
     public void unarchive() {
         this.archived = false;
+    }
+
+    public void addItem(Item item) {
+        this.items.add(item);
+    }
+
+    public void removeItem(Item item) {
+        this.items.remove(item);
     }
 
     @Override

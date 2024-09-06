@@ -1,5 +1,6 @@
 package application.amzn.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -32,7 +33,15 @@ public class Item implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "sell_id")
-    private Sell sell;
+    @JsonIgnore
+    private Sell sale;
+
+    public Item(int quantity, double price, Product product, Sell sale) {
+        this.quantity = quantity;
+        this.price = price;
+        this.product = product;
+        this.sale = sale;
+    }
 
     @Override
     public String toString() {
