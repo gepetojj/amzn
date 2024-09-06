@@ -64,7 +64,9 @@ public class ProductsController {
         if (product.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        // TODO: Verificar se há alguma venda com esse produto
+        if (!product.get().getItems().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
 
         productRepository.deleteById(id);
         return ResponseEntity.ok().build();

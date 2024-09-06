@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -37,6 +38,9 @@ public class Product implements Serializable {
     private int quantity;
 
     private boolean archived;
+
+    @OneToMany
+    private List<Item> items;
 
     public Product(String name, String description, double price, int quantity) {
         this.name = name;
