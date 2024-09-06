@@ -57,4 +57,16 @@ public class ProductsController {
         productRepository.save(objectMapper.treeToValue(patched, Product.class));
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
+        var product = productRepository.findById(id);
+        if (product.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        // TODO: Verificar se há alguma venda com esse produto
+
+        productRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
