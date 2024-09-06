@@ -64,8 +64,15 @@ public class ProductsController {
         if (product.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        if (!product.get().getItems().isEmpty()) {
+
+        if (product.get().isArchived()) {
             return ResponseEntity.badRequest().build();
+        }
+
+        if (!product.get().getItems().isEmpty()) {
+            product.get().archive();
+            productRepository.save(product.get());
+            return ResponseEntity.ok().build();
         }
 
         productRepository.deleteById(id);

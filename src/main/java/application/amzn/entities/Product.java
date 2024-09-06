@@ -50,6 +50,14 @@ public class Product implements Serializable {
         this.archived = false;
     }
 
+    public void archive() {
+        this.archived = true;
+    }
+
+    public void unarchive() {
+        this.archived = false;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
