@@ -51,4 +51,12 @@ public class SalesController {
         service.patch(sale, dto);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteSale(@PathVariable Long id) {
+        var sale = service.findById(id);
+        if (sale == null) return ResponseEntity.notFound().build();
+        service.delete(sale);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -59,10 +59,6 @@ public class SalesService {
             sale.addItem(item);
             sale.incrementTotal(itemDTO.quantity() * product.getPrice());
             itemRepository.save(item);
-
-            product.decrementQuantity(itemDTO.quantity());
-            product.addItem(item);
-            productRepository.save(product);
         }
 
         save(sale);
@@ -72,5 +68,9 @@ public class SalesService {
     public void patch(Sale sale, JsonPatch patch) throws JsonPatchException, JsonProcessingException {
         JsonNode patched = patch.apply(objectMapper.convertValue(sale, JsonNode.class));
         save(objectMapper.treeToValue(patched, Sale.class));
+    }
+
+    public void delete(@org.jetbrains.annotations.NotNull Sale sale) {
+        salesRepository.delete(sale);
     }
 }

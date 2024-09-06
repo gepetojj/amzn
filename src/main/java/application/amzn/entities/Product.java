@@ -42,6 +42,7 @@ public class Product implements Serializable {
     private boolean archived;
 
     @OneToMany
+    @JoinColumn(name = "item_id")
     @JsonIgnore
     private List<Item> items = new ArrayList<>();
 

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "sells")
+@Table(name = "sales")
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Getter
