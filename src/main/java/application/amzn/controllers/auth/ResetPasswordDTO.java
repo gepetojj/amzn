@@ -1,4 +1,4 @@
 package application.amzn.controllers.auth;
 
-public record ResetPasswordDTO(String email, String password) {
+public record ResetPasswordDTO(String email, String password, String newPassword) {
 }

@@ -52,8 +52,10 @@ public class AuthController {
         if (user == null) {
             throw new BadRequestException("Não foi encontrado usuário com o email informado.");
         }
+        var userAndPassToken = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
+        authenticationManager.authenticate(userAndPassToken);
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
+        String encryptedPassword = new BCryptPasswordEncoder().encode(dto.newPassword());
         user.setPassword(encryptedPassword);
         userRepository.save(user);
         return ResponseEntity.ok().build();
