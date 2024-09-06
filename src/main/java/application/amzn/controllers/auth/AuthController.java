@@ -45,4 +45,17 @@ public class AuthController {
         userRepository.save(user);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody @Valid ResetPasswordDTO dto) {
+        var user = userRepository.findUserByEmail(dto.email());
+        if (user == null) {
+            throw new BadRequestException("Não foi encontrado usuário com o email informado.");
+        }
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
+        user.setPassword(encryptedPassword);
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
+    }
 }
