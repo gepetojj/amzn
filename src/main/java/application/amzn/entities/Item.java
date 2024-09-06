@@ -34,9 +34,9 @@ public class Item implements Serializable {
     @ManyToOne
     @JoinColumn(name = "sell_id")
     @JsonIgnore
-    private Sell sale;
+    private Sale sale;
 
-    public Item(int quantity, double price, Product product, Sell sale) {
+    public Item(int quantity, double price, Product product, Sale sale) {
         this.quantity = quantity;
         this.price = price;
         this.product = product;

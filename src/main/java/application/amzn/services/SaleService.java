@@ -1,45 +1,43 @@
 package application.amzn.services;
 
-import application.amzn.controllers.sells.ItemDTO;
-import application.amzn.controllers.sells.PostSaleDTO;
+import application.amzn.controllers.sales.ItemDTO;
+import application.amzn.controllers.sales.PostSaleDTO;
 import application.amzn.entities.Item;
-import application.amzn.entities.Sell;
+import application.amzn.entities.Sale;
 import application.amzn.repositories.ItemRepository;
 import application.amzn.repositories.ProductRepository;
-import application.amzn.repositories.SellRepository;
+import application.amzn.repositories.SaleRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-
 @Service
-public class SellsService {
-    final SellRepository salesRepository;
+public class SaleService {
+    final SaleRepository salesRepository;
     final ProductRepository productRepository;
     final ItemRepository itemRepository;
 
-    public SellsService(SellRepository salesRepository, ProductRepository productRepository, ItemRepository itemRepository) {
+    public SaleService(SaleRepository salesRepository, ProductRepository productRepository, ItemRepository itemRepository) {
         this.salesRepository = salesRepository;
         this.productRepository = productRepository;
         this.itemRepository = itemRepository;
     }
 
-    public Iterable<Sell> findAll() {
+    public Iterable<Sale> findAll() {
         return salesRepository.findAll();
     }
 
-    public Sell findById(Long id) {
+    public Sale findById(Long id) {
         return salesRepository.findById(id).orElse(null);
     }
 
-    public void save(Sell sell) {
-        salesRepository.save(sell);
+    public void save(Sale sale) {
+        salesRepository.save(sale);
     }
 
     @Transactional
-    public ResponseEntity<Sell> sell(PostSaleDTO dto) {
-        var sale = new Sell();
+    public ResponseEntity<Sale> sell(PostSaleDTO dto) {
+        var sale = new Sale();
 
         for (ItemDTO itemDTO : dto.items()) {
             var product = productRepository.findById(itemDTO.productId()).orElse(null);

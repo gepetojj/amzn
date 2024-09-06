@@ -1,4 +1,4 @@
-package application.amzn.controllers.sells;
+package application.amzn.controllers.sales;
 
 import jakarta.validation.Valid;
 

@@ -1,9 +1,7 @@
-package application.amzn.controllers.sells;
+package application.amzn.controllers.sales;
 
-import application.amzn.entities.Item;
-import application.amzn.entities.Product;
-import application.amzn.entities.Sell;
-import application.amzn.services.SellsService;
+import application.amzn.entities.Sale;
+import application.amzn.services.SaleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,29 +9,29 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("sells")
-public class SellsController {
-    private final SellsService service;
+public class SalesController {
+    private final SaleService service;
 
     @Autowired
-    public SellsController(SellsService service) {
+    public SalesController(SaleService service) {
         this.service = service;
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<Sell>> getSales() {
+    public ResponseEntity<Iterable<Sale>> getSales() {
         var sells = service.findAll();
         return ResponseEntity.ok(sells);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Sell> getSale(@PathVariable Long id) {
+    public ResponseEntity<Sale> getSale(@PathVariable Long id) {
         var sell = service.findById(id);
         if (sell == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(sell);
     }
 
     @PostMapping
-    public ResponseEntity<Sell> sell(@RequestBody @Valid PostSaleDTO dto) {
+    public ResponseEntity<Sale> sell(@RequestBody @Valid PostSaleDTO dto) {
         try {
             return service.sell(dto);
         } catch (RuntimeException e) {

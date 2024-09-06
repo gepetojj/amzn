@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Getter
-public class Sell implements Serializable {
+public class Sale implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -35,7 +35,7 @@ public class Sell implements Serializable {
     @JoinColumn(name = "item_id")
     private List<Item> items = new ArrayList<>();
 
-    public Sell() {
+    public Sale() {
         total = 0;
         createdAt = Instant.now();
     }
