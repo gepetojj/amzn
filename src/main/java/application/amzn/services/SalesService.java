@@ -13,6 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -30,18 +33,22 @@ public class SalesService {
         this.objectMapper = objectMapper;
     }
 
+    @Cacheable("sales")
     public Iterable<Sale> findAll() {
         return salesRepository.findAll();
     }
 
+    @Cacheable(value = "sales", key = "#id")
     public Sale findById(Long id) {
         return salesRepository.findById(id).orElse(null);
     }
 
+    @CachePut(cacheNames = "sales", key = "#sale.id")
     public void save(Sale sale) {
         salesRepository.save(sale);
     }
 
+    @CacheEvict(value = "sales", allEntries = true)
     @Transactional
     public ResponseEntity<Sale> sell(PostSaleDTO dto) {
         var sale = new Sale();
@@ -68,11 +75,13 @@ public class SalesService {
         return ResponseEntity.ok(sale);
     }
 
+    @CacheEvict(cacheNames = "sales", key = "#sale.id")
     public void patch(Sale sale, JsonPatch patch) throws JsonPatchException, JsonProcessingException {
         JsonNode patched = patch.apply(objectMapper.convertValue(sale, JsonNode.class));
         save(objectMapper.treeToValue(patched, Sale.class));
     }
 
+    @CacheEvict(cacheNames = "sales", key = "#sale.id")
     public void delete(@org.jetbrains.annotations.NotNull Sale sale) {
         salesRepository.delete(sale);
     }

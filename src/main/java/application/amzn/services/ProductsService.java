@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -22,23 +25,28 @@ public class ProductsService {
         this.objectMapper = objectMapper;
     }
 
+    @Cacheable("products")
     public Iterable<Product> findAll() {
         return repository.findAll();
     }
 
+    @Cacheable(cacheNames = "products", key = "#id")
     public Product findById(Long id) {
         return repository.findById(id).orElse(null);
     }
 
+    @CachePut(cacheNames = "products", key = "#product.id")
     public void save(Product product) {
         repository.save(product);
     }
 
+    @CachePut(cacheNames = "products", key = "#product.id")
     public void patch(Product product, JsonPatch patch) throws JsonPatchException, JsonProcessingException {
         JsonNode patched = patch.apply(objectMapper.convertValue(product, JsonNode.class));
         save(objectMapper.treeToValue(patched, Product.class));
     }
 
+    @CacheEvict(cacheNames = "products", key = "#id")
     public ResponseEntity<?> delete(Long id) {
         var product = findById(id);
         if (product == null) return ResponseEntity.notFound().build();
