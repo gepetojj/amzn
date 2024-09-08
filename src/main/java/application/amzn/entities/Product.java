@@ -71,23 +71,8 @@ public class Product implements Serializable {
         this.archived = false;
     }
 
-    public void addItem(Item item) {
-        this.items.add(item);
-    }
-
-    public void removeItem(Item item) {
-        this.items.remove(item);
-    }
-
     @Override
     public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                ", archived=" + archived +
-                '}';
+        return name;
     }
 }

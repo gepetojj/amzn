@@ -37,7 +37,6 @@ public class ProductsService {
         return repository.findById(id).orElse(null);
     }
 
-    @CachePut(cacheNames = "products", key = "#product.id")
     public void save(Product product) {
         repository.save(product);
     }

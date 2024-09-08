@@ -16,7 +16,6 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import jakarta.transaction.Transactional;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,6 @@ public class SalesService {
         return salesRepository.findById(id).orElse(null);
     }
 
-    @CachePut(cacheNames = "sales", key = "#sale.id")
     public void save(Sale sale) {
         salesRepository.save(sale);
     }
