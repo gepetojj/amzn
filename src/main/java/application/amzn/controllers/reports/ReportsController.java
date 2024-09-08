@@ -52,4 +52,15 @@ public class ReportsController {
         var report = service.generateReport(sales);
         return ResponseEntity.ok(report);
     }
+
+    @GetMapping("/week")
+    public ResponseEntity<Report> getWeeklyReport(@RequestParam() Instant date) {
+        var sales = service.findByWeek(date);
+        if (sales.isEmpty()) {
+            throw new NotFoundException("Não há vendas nessa semana.");
+        }
+
+        var report = service.generateReport(sales);
+        return ResponseEntity.ok(report);
+    }
 }

@@ -52,6 +52,11 @@ public class SalesService {
         return salesRepository.findAllByCreatedAtBetween(date, date.plus(1, ChronoUnit.DAYS));
     }
 
+    @Cacheable(value = "sales-by-week", key = "#date")
+    public Iterable<Sale> findByWeek(Instant date) {
+        return salesRepository.findAllByCreatedAtBetween(date, date.plus(7, ChronoUnit.DAYS));
+    }
+
     public void save(Sale sale) {
         salesRepository.save(sale);
     }

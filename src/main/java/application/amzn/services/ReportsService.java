@@ -22,42 +22,49 @@ public class ReportsService {
         this.salesService = salesService;
     }
 
+    private List<Sale> iterableToList(Iterable<Sale> iterable) {
+        List<Sale> list = new ArrayList<>();
+        iterable.forEach(list::add);
+        return list;
+    }
+
     public List<Sale> findAll() {
-        var sales = salesService.findAll();
-        List<Sale> salesList = new ArrayList<>();
-        sales.forEach(salesList::add);
-        return salesList;
+        var sales = iterableToList(salesService.findAll());
+        return sales;
     }
 
     public List<Sale> findByDate(Instant date) {
-        var sales = salesService.findByDate(date);
-        List<Sale> salesList = new ArrayList<>();
-        sales.forEach(salesList::add);
+        var sales = iterableToList(salesService.findByDate(date));
 
         var dateAtZone = date.atZone(ZoneId.of("America/Maceio"));
         var day = dateAtZone.getDayOfMonth();
         var month = dateAtZone.getMonthValue();
         var year = dateAtZone.getYear();
 
-        return salesList.stream().filter(sale -> {
+        return sales.stream().filter(sale -> {
             var saleDateAtZone = sale.getCreatedAt().atZone(ZoneId.of("America/Maceio"));
             return saleDateAtZone.getDayOfMonth() == day && saleDateAtZone.getMonthValue() == month && saleDateAtZone.getYear() == year;
         }).toList();
     }
 
     public List<Sale> findByMonth(Instant date) {
-        var sales = salesService.findAll();
-        List<Sale> salesList = new ArrayList<>();
-        sales.forEach(salesList::add);
+        var sales = iterableToList(salesService.findAll());
 
         var dateAtZone = date.atZone(ZoneId.of("America/Maceio"));
         var month = dateAtZone.getMonthValue();
         var year = dateAtZone.getYear();
 
-        return salesList.stream().filter(sale -> {
+        return sales.stream().filter(sale -> {
             var saleDateAtZone = sale.getCreatedAt().atZone(ZoneId.of("America/Maceio"));
             return saleDateAtZone.getMonthValue() == month && saleDateAtZone.getYear() == year;
         }).toList();
+    }
+
+    public List<Sale> findByWeek(Instant date) {
+        var dateAtZone = date.atZone(ZoneId.of("America/Maceio"));
+        var dayOfWeek = dateAtZone.getDayOfWeek().getValue();
+        var weekStart = dateAtZone.minusDays(dayOfWeek - 1);
+        return iterableToList(salesService.findByWeek(weekStart.toInstant()));
     }
 
     public Report generateReport(List<Sale> sales) {
