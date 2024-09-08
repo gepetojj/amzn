@@ -32,7 +32,7 @@ public class ProductsService {
         return repository.findAll();
     }
 
-    @Cacheable(cacheNames = "products", key = "#id")
+    @Cacheable(cacheNames = "products")
     public Product findById(Long id) {
         return repository.findById(id).orElse(null);
     }
@@ -41,13 +41,13 @@ public class ProductsService {
         repository.save(product);
     }
 
-    @CachePut(cacheNames = "products", key = "#product.id")
+    @CacheEvict(cacheNames = "products", allEntries = true)
     public void patch(Product product, JsonPatch patch) throws JsonPatchException, JsonProcessingException {
         JsonNode patched = patch.apply(objectMapper.convertValue(product, JsonNode.class));
         save(objectMapper.treeToValue(patched, Product.class));
     }
 
-    @CacheEvict(cacheNames = "products", key = "#id")
+    @CacheEvict(cacheNames = "products", allEntries = true)
     public ResponseEntity<?> delete(Long id) {
         var product = findById(id);
         if (product == null) throw new ProductNotFoundException(id);
