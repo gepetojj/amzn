@@ -72,9 +72,11 @@ public class ReportsService {
         HashMap<Product, Integer> quantityByProduct = new HashMap<>();
         HashMap<Product, Double> soldByProduct = new HashMap<>();
         var totalSold = 0d;
+        var totalSales = 0;
 
         for (Sale sale : sales) {
             totalSold += sale.getTotal();
+            totalSales++;
 
             for (Item item : sale.getItems()) {
                 var product = item.getProduct();
@@ -86,6 +88,6 @@ public class ReportsService {
             }
         }
 
-        return new Report(totalSold, soldByProduct, quantityByProduct, products);
+        return new Report(totalSold, totalSales, soldByProduct, quantityByProduct, products);
     }
 }
