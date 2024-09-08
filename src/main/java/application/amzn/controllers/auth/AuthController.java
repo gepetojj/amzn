@@ -60,4 +60,16 @@ public class AuthController {
         userRepository.save(user);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/change-role")
+    public ResponseEntity<?> changeUserRole(@RequestBody @Valid ChangeRoleDTO dto) {
+        var user = userRepository.findById(dto.userId()).orElse(null);
+        if (user == null) {
+            throw new BadRequestException("Não foi encontrado usuário com o id informado.");
+        }
+
+        user.setRole(dto.role());
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
+    }
 }

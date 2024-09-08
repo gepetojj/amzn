@@ -37,6 +37,7 @@ public class User implements Serializable, UserDetails {
     @Setter
     private String password;
 
+    @Setter
     private UserRole role;
 
     public User(String name, String email, String password) {
@@ -57,8 +58,9 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (role == UserRole.ADMIN)
+        if (role == UserRole.ADMIN) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_SELLER"));
+        }
         return List.of(new SimpleGrantedAuthority("ROLE_SELLER"));
     }
 
