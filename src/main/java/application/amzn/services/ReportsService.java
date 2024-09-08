@@ -35,13 +35,28 @@ public class ReportsService {
         sales.forEach(salesList::add);
 
         var dateAtZone = date.atZone(ZoneId.of("America/Maceio"));
-        var day = dateAtZone.getDayOfMonth() + 1;
+        var day = dateAtZone.getDayOfMonth();
         var month = dateAtZone.getMonthValue();
         var year = dateAtZone.getYear();
 
         return salesList.stream().filter(sale -> {
             var saleDateAtZone = sale.getCreatedAt().atZone(ZoneId.of("America/Maceio"));
             return saleDateAtZone.getDayOfMonth() == day && saleDateAtZone.getMonthValue() == month && saleDateAtZone.getYear() == year;
+        }).toList();
+    }
+
+    public List<Sale> findByMonth(Instant date) {
+        var sales = salesService.findAll();
+        List<Sale> salesList = new ArrayList<>();
+        sales.forEach(salesList::add);
+
+        var dateAtZone = date.atZone(ZoneId.of("America/Maceio"));
+        var month = dateAtZone.getMonthValue();
+        var year = dateAtZone.getYear();
+
+        return salesList.stream().filter(sale -> {
+            var saleDateAtZone = sale.getCreatedAt().atZone(ZoneId.of("America/Maceio"));
+            return saleDateAtZone.getMonthValue() == month && saleDateAtZone.getYear() == year;
         }).toList();
     }
 
