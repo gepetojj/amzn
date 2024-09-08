@@ -29,8 +29,7 @@ public class ReportsService {
     }
 
     public List<Sale> findAll() {
-        var sales = iterableToList(salesService.findAll());
-        return sales;
+        return iterableToList(salesService.findAll());
     }
 
     public List<Sale> findByDate(Instant date) {
