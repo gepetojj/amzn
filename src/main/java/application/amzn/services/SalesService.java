@@ -63,16 +63,16 @@ public class SalesService {
 
     @CacheEvict(value = {"sales", "products"}, allEntries = true)
     @Transactional
-    public ResponseEntity<Sale> sell(PostSaleDTO dto) {
+    public Sale sell(PostSaleDTO dto) {
         var sale = new Sale();
 
         for (ItemDTO itemDTO : dto.items()) {
             var product = productRepository.findById(itemDTO.productId()).orElse(null);
             if (product == null) {
-                throw new BadRequestException("O produto não existe");
+                throw new BadRequestException("O produto não existe.");
             }
             if (!product.isSellable(itemDTO.quantity())) {
-                throw new InternalException("Não é possível vender esse produto");
+                throw new BadRequestException("O produto " + product + " está desabilitado ou sem estoque.");
             }
 
             var item = new Item(itemDTO.quantity(), product.getPrice(), product, sale);
@@ -85,7 +85,7 @@ public class SalesService {
         }
 
         save(sale);
-        return ResponseEntity.ok(sale);
+        return sale;
     }
 
     @CacheEvict(value = "sales", allEntries = true)

@@ -39,12 +39,8 @@ public class SalesController {
     @PostMapping
     public ResponseEntity<Sale> sell(@RequestBody @Valid PostSaleDTO dto) {
         if (dto.items().isEmpty()) throw new BadRequestException("A venda deve ter ao menos um item.");
-
-        try {
-            return service.sell(dto);
-        } catch (RuntimeException e) {
-            throw new InternalException("Não foi possível concluir a venda.");
-        }
+        var sale = service.sell(dto);
+        return ResponseEntity.ok(sale);
     }
 
     @PatchMapping("/{id}")

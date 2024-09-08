@@ -53,4 +53,9 @@ public class ProductsController {
     public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
         return service.delete(id);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> unarchiveProduct(@PathVariable("id") Long id) {
+        return service.unarchive(id);
+    }
 }

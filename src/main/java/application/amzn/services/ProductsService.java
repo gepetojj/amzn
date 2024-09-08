@@ -62,4 +62,15 @@ public class ProductsService {
         repository.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
+    @CacheEvict(cacheNames = "products", allEntries = true)
+    public ResponseEntity<?> unarchive(Long id) {
+        var product = findById(id);
+        if (product == null) throw new ProductNotFoundException(id);
+        if (!product.isArchived()) throw new BadRequestException("O produto não está arquivado.");
+
+        product.unarchive();
+        save(product);
+        return ResponseEntity.ok().build();
+    }
 }
