@@ -4,42 +4,42 @@ import application.amzn.entities.Item;
 import application.amzn.entities.Product;
 import application.amzn.entities.Report;
 import application.amzn.entities.Sale;
-import application.amzn.repositories.SaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @Service
 public class ReportsService {
-    private final SaleRepository saleRepository;
+    private final SalesService salesService;
 
     @Autowired
-    public ReportsService(SaleRepository saleRepository) {
-        this.saleRepository = saleRepository;
+    public ReportsService(SalesService salesService) {
+        this.salesService = salesService;
     }
 
     public List<Sale> findAll() {
-        var sales = saleRepository.findAll();
+        var sales = salesService.findAll();
         List<Sale> salesList = new ArrayList<>();
         sales.forEach(salesList::add);
         return salesList;
     }
 
     public List<Sale> findByDate(Instant date) {
-        var sales = saleRepository.findAllByCreatedAtBetween(date, date.plus(1, ChronoUnit.DAYS));
+        var sales = salesService.findByDate(date);
+        List<Sale> salesList = new ArrayList<>();
+        sales.forEach(salesList::add);
 
         var dateAtZone = date.atZone(ZoneId.of("America/Maceio"));
         var day = dateAtZone.getDayOfMonth() + 1;
         var month = dateAtZone.getMonthValue();
         var year = dateAtZone.getYear();
 
-        return sales.stream().filter(sale -> {
+        return salesList.stream().filter(sale -> {
             var saleDateAtZone = sale.getCreatedAt().atZone(ZoneId.of("America/Maceio"));
             return saleDateAtZone.getDayOfMonth() == day && saleDateAtZone.getMonthValue() == month && saleDateAtZone.getYear() == year;
         }).toList();

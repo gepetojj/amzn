@@ -20,6 +20,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 @Service
 public class SalesService {
     private final SaleRepository salesRepository;
@@ -42,6 +45,11 @@ public class SalesService {
     @Cacheable(value = "sales")
     public Sale findById(Long id) {
         return salesRepository.findById(id).orElse(null);
+    }
+
+    @Cacheable(value = "sales-by-date", key = "#date")
+    public Iterable<Sale> findByDate(Instant date) {
+        return salesRepository.findAllByCreatedAtBetween(date, date.plus(1, ChronoUnit.DAYS));
     }
 
     public void save(Sale sale) {
